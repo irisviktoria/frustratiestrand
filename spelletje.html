@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Even geen Claude? Ontwijk wat rommel op het strand.</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐢</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--zand:#F8EBE2;--roze:#D9A0A0;--koraal:#E57F6F;--zee:#2E5E6B;--perzik:#F4C9B5;--schuim:#FFF9F4}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--zand);color:var(--zee);font:17px/1.5 Nunito,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;padding:1.4rem 1rem 2rem}
+h1{font-family:Fredoka;font-size:1.7rem;text-align:center;margin:.2em 0 0}
+p{max-width:44ch;text-align:center;margin:.3em 0 1rem}
+a.terug{color:var(--zee);font-weight:600}
+.wrap{position:relative;width:100%;max-width:640px}
+canvas{width:100%;height:auto;display:block;background:linear-gradient(#CDE6E8,#FFF9F4 70%);border-radius:24px;box-shadow:0 6px 0 var(--perzik)}
+.hud{display:flex;justify-content:space-between;font-family:Fredoka;font-size:1.1rem;margin:.6rem .2rem}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(248,235,226,.92);border-radius:24px;padding:1rem}
+.overlay.verborgen{display:none}
+.overlay h2{font-family:Fredoka;margin:.2em 0}
+button{font-family:Fredoka;font-size:1.15rem;font-weight:600;background:var(--koraal);color:#fff;border:0;border-radius:99px;padding:.7rem 1.6rem;margin-top:.6rem;cursor:pointer;box-shadow:0 5px 0 #B9584A}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 #B9584A}
+.tip{font-size:.9rem;opacity:.75;margin-top:.4rem}
+</style>
+</head>
+<body>
+<h1>🐢 Nog geen credits? Ontwijk wat rommel op het strand.</h1>
+<p>Spatiebalk of tik het scherm om te springen. Ontwijk de krab, de inktvis, de schelp en het zeewier. Meer snelheid, minder geduld — precies zoals kantoor.</p>
+
+<div class="wrap">
+<canvas id="spel" width="640" height="260"></canvas>
+<div class="overlay" id="overlay">
+  <h2 id="ov-titel">Klaar om te springen?</h2>
+  <p id="ov-tekst">Spring over de kwallen. Raak er eentje en het is voorbij.</p>
+  <button id="start">Start</button>
+  <p class="tip">Hoogste score: <span id="high">0</span></p>
+</div>
+</div>
+<div class="hud"><span>Score: <span id="score">0</span></span><span><a class="terug" href="index.html">← Terug naar het strand</a></span></div>
+
+<script>
+const OBSTAKELS_EMOJI = ['🦀','🦑','🐚','🌿'];
+const cv = document.getElementById('spel'), ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height, GROND = H - 34;
+const overlay = document.getElementById('overlay'), ovTitel=document.getElementById('ov-titel'), ovTekst=document.getElementById('ov-tekst');
+const scoreEl = document.getElementById('score'), highEl = document.getElementById('high');
+let hoog = Number(localStorage.getItem('nore_spel_high')||0); highEl.textContent = hoog;
+
+let speler = {x:60,y:GROND,w:34,h:34,vy:0,springt:false};
+let obstakels = [], snelheid = 4.2, score = 0, bezig = false, tijdTotSpawn = 60, tick = 0;
+
+function reset(){
+  speler = {x:60,y:GROND,w:34,h:34,vy:0,springt:false};
+  obstakels = []; snelheid = 4.2; score = 0; tick = 0;
+  tijdTotSpawn = 60; bezig = true;
+  overlay.classList.add('verborgen');
+}
+function spring(){
+  if(!bezig) return;
+  if(!speler.springt){ speler.vy = -9.6; speler.springt = true; }
+}
+const EINDZINNEN = [
+  'De AI heeft het gezien en er niks van gezegd.',
+  'Ergens telt een server nu weer rustig terug voor je.',
+  'Dit had een prompt kunnen zijn. Je koos voor krabben.',
+  'Nieuw record in niks doen. Knap eigenlijk.',
+  'Je credits laden niet sneller op door dit spelletje. Maar het scheelt.',
+  'Zelfs Claude moet af en toe even wachten. Solidair, dit.'
+];
+function eindig(){
+  bezig = false;
+  hoog = Math.max(hoog, Math.floor(score));
+  localStorage.setItem('nore_spel_high', hoog);
+  highEl.textContent = hoog;
+  ovTitel.textContent = 'Geraakt.';
+  const zin = EINDZINNEN[Math.floor(Math.random()*EINDZINNEN.length)];
+  ovTekst.textContent = 'Score: ' + Math.floor(score) + '. ' + zin;
+  document.getElementById('start').textContent = 'Nog een keer';
+  overlay.classList.remove('verborgen');
+}
+function botsing(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
+
+function stap(){
+  if(bezig){
+    tick++;
+    speler.vy += 0.55; speler.y += speler.vy;
+    if(speler.y > GROND){ speler.y = GROND; speler.vy = 0; speler.springt = false; }
+
+    tijdTotSpawn--;
+    if(tijdTotSpawn <= 0){
+      const h = 26 + Math.random()*18;
+      const type = OBSTAKELS_EMOJI[Math.floor(Math.random()*OBSTAKELS_EMOJI.length)];
+      obstakels.push({x:W+10, y:GROND+34-h, w:22, h:h, type:type});
+      tijdTotSpawn = Math.max(38, 78 - snelheid*4) + Math.random()*30;
+    }
+    obstakels.forEach(o => o.x -= snelheid);
+    obstakels = obstakels.filter(o => o.x > -30);
+
+    for(const o of obstakels){ if(botsing(speler,o)){ eindig(); break; } }
+
+    score += snelheid*0.045;
+    snelheid += 0.0032;
+    scoreEl.textContent = Math.floor(score);
+  }
+
+  ctx.clearRect(0,0,W,H);
+  // golflijn grond
+  ctx.strokeStyle = '#D9A0A0'; ctx.lineWidth = 3; ctx.beginPath();
+  for(let x=0;x<=W;x+=20){ ctx.lineTo(x, GROND+34+Math.sin((x+tick*2)/40)*3); }
+  ctx.stroke();
+  ctx.fillStyle = '#F4C9B5'; ctx.fillRect(0, GROND+36, W, H-(GROND+36));
+
+  // schildpad
+  ctx.font = '30px serif'; ctx.textBaseline = 'bottom';
+  ctx.fillText('🐢', speler.x, speler.y+32);
+
+  // obstakels
+  ctx.font = '26px serif';
+  obstakels.forEach(o => ctx.fillText(o.type, o.x, o.y+o.h+4));
+
+  requestAnimationFrame(stap);
+}
+
+document.getElementById('start').addEventListener('click', reset);
+window.addEventListener('keydown', e => { if(e.code==='Space'){ e.preventDefault(); bezig ? spring() : document.getElementById('start').click(); }});
+cv.addEventListener('pointerdown', () => { bezig ? spring() : document.getElementById('start').click(); });
+
+requestAnimationFrame(stap);
+</script>
+</body>
+</html>
