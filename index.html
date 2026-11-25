@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Nore's Frustratie-Strand</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐢</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--zand:#F8EBE2;--roze:#D9A0A0;--koraal:#E57F6F;--zee:#2E5E6B;--perzik:#F4C9B5;--schuim:#FFF9F4}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--zand);color:var(--zee);font:17px/1.55 Nunito,system-ui,sans-serif}
+h1,h2,h3,button,select{font-family:Fredoka,Nunito,sans-serif}
+h1{font-size:clamp(2.4rem,8vw,4.2rem);line-height:1.02;margin:.2em 0 .1em;font-weight:700}
+h2{font-size:1.9rem;margin:0 0 .3em;font-weight:600;display:flex;align-items:center;gap:.6rem}
+h3{margin:.2em 0}
+p{margin:.3em 0 1em}
+main{max-width:860px;margin:0 auto;padding:0 1.2rem 3rem}
+section{margin:0 0 3.2rem}
+.lead{max-width:56ch}
+/* hero */
+header{background:var(--roze);color:var(--schuim);text-align:center;padding:2.2rem 1.2rem 0;position:relative;overflow:hidden}
+header p{max-width:44ch;margin:0 auto 1.4rem;color:#fff}
+.wave{display:block;width:100%;height:60px;margin-top:-1px}
+.rank{font-family:Fredoka;font-size:1.25rem;background:var(--schuim);color:var(--zee);display:inline-block;padding:.25rem 1rem;border-radius:99px;margin:.6rem 0 0}
+.count{font-family:Fredoka;font-size:1rem;margin-top:.8rem}
+.count b{font-size:2.6rem;display:block;line-height:1}
+#golf{position:relative;width:200px;height:200px;border-radius:50%;border:0;cursor:pointer;color:#fff;font-size:1.5rem;font-weight:600;background:radial-gradient(circle at 35% 30%,#F19A8B,var(--koraal) 60%,#CF6656);box-shadow:0 10px 0 #B9584A,0 18px 30px rgba(46,94,107,.3);transition:transform .1s,box-shadow .1s;margin:.6rem 0}
+#golf span{display:block;font-size:3.2rem}
+#golf:active{transform:translateY(8px);box-shadow:0 2px 0 #B9584A}
+#golf:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--zee);outline-offset:3px}
+.reactie{min-height:3.2em;font-weight:600;color:#fff;margin-top:1rem}
+#zee-golf{position:fixed;left:0;right:0;bottom:-120vh;height:120vh;background:linear-gradient(var(--perzik),var(--roze));opacity:.85;z-index:40;pointer-events:none;border-radius:50% 50% 0 0/8% 8% 0 0}
+#zee-golf.go{animation:rol 1.6s ease-in-out}
+@keyframes rol{0%{bottom:-120vh}45%{bottom:-20vh}100%{bottom:-120vh}}
+/* kaarten */
+.kaart{position:relative;background:var(--schuim);border-radius:28px;padding:1.4rem;box-shadow:0 6px 0 var(--perzik)}
+.rapport{background:var(--perzik);border-radius:28px 28px 28px 6px;padding:1.2rem 1.4rem;margin-top:-1.5rem;position:relative;z-index:2}
+.rapport h2{font-size:1.3rem}
+.rapport dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem}
+.rapport dt{font-weight:700}.rapport dd{margin:0}
+button.knop,select{font-size:1.05rem;border-radius:99px;border:2px solid var(--zee);background:var(--schuim);color:var(--zee);padding:.55rem 1.2rem;cursor:pointer}
+button.knop{background:var(--koraal);border-color:var(--koraal);color:#fff;font-weight:600}
+button.knop.licht{background:var(--schuim);color:var(--zee);border-color:var(--zee)}
+button.knop:hover{filter:brightness(1.05)}
+button[disabled]{opacity:.5;cursor:not-allowed}
+select{width:100%;margin:.4rem 0 1rem;border-radius:18px}
+.tweeluik{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
+.tweeluik>div{border-radius:20px;padding:1rem;background:var(--zand)}
+.tweeluik .stuur{background:var(--perzik)}
+.tweeluik h3{font-size:.95rem;opacity:.8}
+/* bingo */
+#bingo{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+#bingo button{aspect-ratio:1;border-radius:16px;border:2px solid var(--perzik);background:var(--schuim);color:var(--zee);font:600 .72rem/1.15 Fredoka,sans-serif;padding:.3rem;cursor:pointer;overflow:hidden;hyphens:auto}
+#bingo button.aan{background:var(--roze);color:#fff;border-color:var(--roze)}
+#bingo button.aan::after{content:" 🐚"}
+#bingo-msg{min-height:1.6em;font-weight:600;margin:.8rem 0 0}
+/* bellen */
+.opties{display:grid;gap:.6rem;margin:.6rem 0 1rem}
+.opties .knop{text-align:left;border-radius:20px}
+#bel-uitslag{background:var(--perzik);border-radius:22px;padding:1rem 1.2rem;display:none}
+#bel-uitslag.zichtbaar{display:block}
+.bellers{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem}
+a.knop{display:inline-block;text-decoration:none;padding:.55rem 1.2rem;border-radius:99px;background:var(--koraal);color:#fff;font:600 1.05rem Fredoka}
+/* crew */
+.crew{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.crew .kaart{text-align:center}
+.crew .av{width:150px;height:150px;font-size:4rem;margin:0 auto .6rem}
+.av{position:relative;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--perzik);border:3px solid var(--schuim);font-size:1.6rem;flex:none;overflow:hidden;box-shadow:0 3px 0 var(--roze)}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* knuffel die opduikt */
+#peek{position:fixed;right:1rem;bottom:-200px;z-index:50;display:flex;align-items:flex-end;gap:.6rem;transition:bottom .5s cubic-bezier(.3,1.5,.5,1);max-width:min(340px,90vw)}
+#peek.show{bottom:1rem}
+#peek .av{width:84px;height:84px;font-size:2.4rem}
+#peek .praat{background:var(--schuim);border-radius:20px 20px 4px 20px;padding:.7rem 1rem;box-shadow:0 6px 18px rgba(46,94,107,.25);font-weight:600;font-size:.95rem}
+.confetti{position:fixed;top:-2rem;z-index:60;pointer-events:none;animation:val 2.8s linear forwards}
+@keyframes val{to{transform:translateY(110vh) rotate(540deg)}}
+.knoppen{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .8rem}
+a.knop.licht{background:var(--schuim);color:var(--zee);border:2px solid var(--zee)}
+#trein .kaart+.kaart{margin-top:1rem}
+.kaart h3{margin-top:0}
+.klein{font-size:.85rem;opacity:.75;margin:.6rem 0 0}
+.eet{font:600 1.5rem/1.2 Fredoka,sans-serif;min-height:2.6em;display:flex;align-items:center;margin:.2rem 0}
+.pot,.bali-getal{font-family:Fredoka}
+.pot b,.bali-getal b{font-size:3rem;line-height:1;margin-right:.3rem}
+.balk{height:16px;background:var(--zand);border-radius:99px;overflow:hidden;margin:.6rem 0}
+.balk div{height:100%;width:0;background:var(--koraal);border-radius:99px;transition:width .5s}
+.baan{position:relative;height:56px;margin:.6rem 0;border-bottom:4px dotted var(--roze)}
+.baan .plank{position:absolute;bottom:2px;left:0;font-size:2rem;transition:left 1s}
+.baan .eiland{position:absolute;bottom:2px;right:0;font-size:2rem}
+.logboek{font:600 1.15rem/1.4 Fredoka,sans-serif;min-height:3em}
+input[type=date]{font:inherit;border:2px solid var(--zee);border-radius:99px;padding:.45rem 1rem;background:var(--schuim);color:var(--zee);margin:.4rem .4rem .6rem 0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.gast{position:absolute;right:1.3rem;bottom:100%;width:108px;margin-bottom:-2px;pointer-events:none;z-index:1}
+.kaart:has(>.gast){margin-top:4.6rem}
+.poppetje{width:170px;margin:0 auto .4rem}
+.belnaam{display:inline-block;padding:.55rem 1.2rem;border-radius:99px;background:var(--koraal);color:#fff;font:600 1.05rem Fredoka,sans-serif}
+.hero-gast{position:absolute;width:120px;display:none}
+@media (min-width:860px){.hero-gast{display:block}.hg-l{left:calc(50% - 400px);top:46%}.hg-r{right:calc(50% - 400px);top:40%}}
+footer{text-align:center;padding:2rem 1rem 3rem;background:var(--roze);color:#fff}
+@media (max-width:560px){.tweeluik{grid-template-columns:1fr}#bingo button{font-size:.6rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero-gast hg-l" data-k="walli" data-vorm="volledig"></div>
+  <div class="hero-gast hg-r" data-k="kwalli" data-vorm="volledig"></div>
+  <h1>Nore's<br>Frustratie-Strand</h1>
+  <p>Zand tussen je tenen, wifi in je hoofd. Druk op de schelp zodra iets je irriteert. De zee noteert het.</p>
+  <button id="golf" aria-label="Frustratie melden"><span>🌊</span>Laat maar los</button>
+  <div class="count"><b id="teller">0</b>golven van vandaag</div>
+  <div class="rank" id="rang">Kiezelsteentje</div>
+  <p class="reactie" id="reactie">Nog niets gemeld. Verdacht rustig.</p>
+  <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 30 Q75 0 150 30 T300 30 T450 30 T600 30 T750 30 T900 30 T1050 30 T1200 30 V60 H0Z" fill="#F8EBE2"/></svg>
+</header>
+
+<main>
+<div class="rapport" id="rapport"></div>
+<br>
+
+<section id="vertaler">
+  <h2>Wat ik denk / wat ik stuur <span data-deco="0"></span></h2>
+  <p class="lead">Kies de situatie. Links staat wat er in je hoofd gebeurt, rechts de versie die je gewoon kunt versturen.</p>
+  <div class="kaart">
+    <div class="gast" data-k="kwalli" data-pose="zwaai"></div>
+    <label for="situatie" class="sr">Situatie</label>
+    <select id="situatie"></select>
+    <div class="tweeluik">
+      <div><h3>Wat ik denk</h3><p id="denk"></p></div>
+      <div class="stuur"><h3>Wat ik stuur</h3><p id="stuur"></p></div>
+    </div>
+    <button class="knop" id="kopieer">Kopieer wat ik stuur</button>
+    <span id="kopieer-msg" role="status"></span>
+  </div>
+</section>
+
+<section id="bingo-sectie">
+  <h2>Klantenbingo aan zee <span data-deco="1"></span></h2>
+  <p class="lead">Tik een vakje aan als je het vandaag hoort. Een hele rij, kolom of diagonaal is bingo.</p>
+  <div class="kaart">
+    <div class="gast" data-k="walli"></div>
+    <div id="bingo"></div>
+    <p id="bingo-msg" role="status"></p>
+    <button class="knop licht" id="bingo-reset">Nieuwe kaart</button>
+  </div>
+</section>
+
+<section id="bellen">
+  <h2>Wie moet ik bellen? <span data-deco="2"></span></h2>
+  <p class="lead">Kies wat het het meest lijkt op.</p>
+  <div class="kaart">
+    <div class="gast" data-k="nilli"></div>
+    <div class="opties" id="opties"></div>
+    <div id="bel-uitslag" role="status"></div>
+  </div>
+</section>
+
+<section id="trein">
+  <h2>Eb op het spoor <span data-deco="2"></span></h2>
+  <p class="lead">De trein rijdt niet. Het is eb. Dit ligt niet aan jou. Padje vindt het niet erg, want schildpadden haasten zich nergens voor.</p>
+  <div class="kaart">
+    <div class="gast" data-k="padje"></div>
+    <h3>Check de trein</h3>
+    <div class="knoppen">
+      <a class="knop" href="https://www.ns.nl/reisinformatie/actuele-situatie-op-het-spoor/" target="_blank" rel="noopener">Storingen</a>
+      <a class="knop licht" href="https://www.ns.nl/reizen" target="_blank" rel="noopener">Reisplanner</a>
+      <a class="knop licht" href="https://treinenradar.nl/" target="_blank" rel="noopener">Treinradar</a>
+    </div>
+  </div>
+  <div class="kaart">
+    <h3>Wat eten we? De eet-planner beslist</h3>
+    <p class="eet" id="eet-uitslag" aria-live="polite">Klik en de zee kiest voor je.</p>
+    <button class="knop" id="eet-knop">Kies een plek</button>
+    <p class="klein">Check even de openingstijden voordat je gaat lopen.</p>
+  </div>
+</section>
+
+<section id="overuren">
+  <h2>Overuren-spaarpot <span data-deco="1"></span></h2>
+  <p class="lead">Elk uur dat je extra werkt, gaat de spaarpot in. Genoeg gespaard? Dan is die vrijdagmiddag van jou.</p>
+  <div class="kaart">
+    <div class="gast" data-k="gekki" data-pose="slaap"></div>
+    <div class="pot"><b id="ou-uren">0</b> uur gespaard</div>
+    <div class="balk"><div id="ou-balk"></div></div>
+    <p id="ou-tekst" role="status"></p>
+    <div class="knoppen">
+      <button class="knop" id="ou-plus">+1 uur</button>
+      <button class="knop licht" id="ou-half">+30 min</button>
+      <button class="knop licht" id="ou-min">-1 uur (opgenomen)</button>
+    </div>
+  </div>
+</section>
+
+<section id="bali">
+  <h2>Surfvakantie <span data-deco="0"></span></h2>
+  <p class="lead">Een lange vakantie, remote werken en surfen. De golven wachten wel even.</p>
+  <div class="kaart">
+    <div class="gast" data-k="walli" data-pose="zwaai"></div>
+    <div id="bali-leeg">
+      <label for="bali-datum">Wanneer vertrek je (ongeveer)?</label><br>
+      <input type="date" id="bali-datum">
+      <button class="knop" id="bali-zet">Start de aftelklok</button>
+    </div>
+    <div id="bali-vol" hidden>
+      <div class="bali-getal"><b id="bali-dagen">0</b><span id="bali-label"></span></div>
+      <div class="baan"><span class="plank" id="bali-plank">🏄</span><span class="eiland">🏝️</span></div>
+      <p id="bali-quote"></p>
+      <button class="knop licht" id="bali-wijzig">Andere datum</button>
+    </div>
+  </div>
+</section>
+
+<section id="logboek">
+  <h2>Uit het logboek van het strandhuis <span data-deco="4"></span></h2>
+  <p class="lead">Verhalen uit het archief. Niet elke dag nieuw, wel elke keer waar.</p>
+  <div class="kaart">
+    <div class="gast" data-k="kwalli"></div>
+    <p class="logboek" id="logboek-tekst" aria-live="polite"></p>
+    <button class="knop licht" id="logboek-knop">Ander verhaal</button>
+  </div>
+</section>
+
+<section id="credits-op">
+  <h2>Geen Claude meer? <span data-deco="2"></span></h2>
+  <p class="lead">Even geen credits over? Spring een paar golven totdat het weer kan.</p>
+  <div class="kaart">
+    <a class="knop" href="spelletje.html" target="_blank" rel="noopener">Speel het strandspelletje</a>
+  </div>
+</section>
+
+<section id="crew">
+  <h2>De crew <span data-deco="3"></span></h2>
+  <p class="lead">De knuffels die de zee bewaken. Ze luisteren altijd, oordelen nooit en klagen niet over deadlines.</p>
+  <div class="crew" id="crewlijst"></div>
+</section>
+</main>
+
+<footer>Gemaakt met veel liefde en een beetje wol. 🐢</footer>
+
+<div id="zee-golf"></div>
+<div id="peek" aria-live="polite"></div>
+
+<script src="knuffels.js"></script>
+<script>
+/* ====== HIER PAS JE DINGEN AAN ====== */
+const CONFIG = {
+  // Vul telefoonnummers in het formaat 0612345678 in. Leeg = knop staat nog uit.
+  telefoon: { ik: '', papa: '', mama: '' },
+  jouwNaam: 'Iris',
+  baliDatum: '',              // optioneel: vul alvast een datum in, bv. '2027-03-15'. Leeg = Nore vult zelf in
+  overurenPerMiddag: 4        // hoeveel overuren = 1 vrije middag
+};
+// Foto's: zet ze in de map img/ met de bestandsnaam hieronder (.jpg). Zonder foto zie je de emoji.
+const CREW = [
+  {id:'kwalli', naam:'Kwalli', emoji:'🪼', tekst:'Zweeft door elke vergadering heen. Voelt niets, ziet alles.'},
+  {id:'walli',  naam:'Walli',  emoji:'🐳', tekst:'Heeft een groot hart en een nog grotere inbox.'},
+  {id:'padje',  naam:'Padje',  emoji:'🐢', tekst:'Haast zich nergens voor. Haalt de deadline toch.'},
+  {id:'gekki',  naam:'Gekki',  emoji:'🦎', tekst:'Doet alsof het slaapt, tot het probleem vanzelf weggaat.'},
+  {id:'nilli',  naam:'Nilli',  emoji:'🦏', tekst:'Neushoorn van functie, nijlpaard van overtuiging. Typisch iemand die zich niet aan de briefing houdt.'}
+];
+const REACTIES = [
+  'De zee heeft het genoteerd. De zee doet er niks mee.',
+  'Begrijpelijk. Ademhalen kan gratis.',
+  'Dit wordt bewaard in de map "Later".',
+  'De schildpad zegt: kalm aan.',
+  'Zelfs de octopus zou hier met alle acht armen van zuchten.',
+  'Geregistreerd. Ticketnummer: geen.',
+  'Een golfje. Het gaat voorbij. De klant meestal niet.',
+  'Ik zou het graag met je eens zijn, maar dan zitten we beiden mis.'
+];
+const RANGEN = [[0,'Kiezelsteentje'],[3,'Krab in de knel'],[6,'Kwal op scherp'],[9,'Octopus met 8 deadlines'],[12,'Surfer op een tsunami']];
+const SITUATIES = [
+  {n:'Deadline gemist', d:'Dit stond al drie weken in de planning.', s:'Ik zie dat de aanlevering nog niet binnen is. Zullen we een nieuwe datum afspreken, zodat we de kwaliteit kunnen garanderen?'},
+  {n:'Extra werk erbij', d:'Even snel iets kleins is nooit klein.', s:'Dit valt buiten de huidige scope. Zullen we even bellen om de opties te bespreken?'},
+  {n:'Klant reageert niet', d:'Ik heb dit nu drie keer gevraagd.', s:'Ik wil zeker weten dat mijn eerdere bericht goed is aangekomen. Kun je dit uiterlijk morgen 12:00 bevestigen, zodat we op schema blijven?'},
+  {n:'Collega heeft iets fout ingesteld', d:'Wie heeft dit zo neergezet?', s:'Ik zie een afwijking in de instellingen. Kunnen we er samen even naar kijken, zodat het klopt voor de verzending?'},
+  {n:'Kan dit vandaag nog?', d:'Nee. Het is 16:45.', s:'Vandaag lukt het niet meer zonder concessies aan de kwaliteit. Morgen voor 12:00 kan ik het wel opleveren.'},
+  {n:'Alles moet toch anders na goedkeuring', d:'We hadden dit letterlijk zo afgesproken.', s:'Dank voor je feedback. Omdat dit na goedkeuring komt, plan ik het als aparte aanpassing in. Zal ik een inschatting sturen?'},
+  {n:'Iemand heeft een ander idee', d:'Ik zou het graag met je eens zijn, maar dan zitten we beiden mis.', s:'Dank voor je input. Ik zie het net iets anders, dus zullen we de opties naast elkaar zetten en samen kiezen?'},
+  {n:'Reply all met 15 mensen in cc', d:'Nu weet iedereen het. Ook de mensen die het niet hoefden te weten.', s:'Om de inbox van de anderen te sparen, antwoord ik hierna alleen aan jou. Mochten anderen mee moeten lezen, laat het me weten.'},
+  {n:'Vergadering die een mail had kunnen zijn', d:'Dit had een mail kunnen zijn. Een korte.', s:'Kunnen we dit eerst via mail afstemmen? Dan plannen we alleen een gesprek in als er na het lezen nog vragen zijn.'},
+  {n:'Bijlage in het verkeerde formaat', d:'Dit is een screenshot van een Word-document van een PDF.', s:'Bedankt voor het aanleveren. Kun je het bestand opnieuw sturen in het oorspronkelijke formaat? Dan kan ik er direct mee verder.'},
+  {n:'"Heb je even tijd?" op vrijdagmiddag', d:'Even? Het is vrijdag. Even bestaat niet meer.', s:'Daar help ik je graag mee. Zullen we dit maandagochtend oppakken? Dan kan ik er de aandacht aan geven die het verdient.'},
+  {n:"Vragen naar nieuwe collega's", d:'Er is geld genoeg. Alleen niet voor mensen.', s:'Hé, even een vraag: met de huidige bezetting wordt het krap. Weet je al wanneer er nieuwe mensen bij komen? Dan kan ik mijn planning daarop afstemmen.'}
+];
+const BINGO = ['Kan dit vandaag nog?','Even snel iets kleins','Ik had de mail niet gezien','Het ligt aan de tool','Kunnen we bellen?','Dat zei ik toch al?','Nog een laatste kleine wijziging','Het is dringend','Ik ben er zo op terug','Kunnen we dit anders doen?','Vergadering die een mail had kunnen zijn','Reply all','De link werkt niet','Kun je meekijken?','Maar dat is toch niet zo moeilijk?','De klant wil het gisteren','Wie heeft dit gedaan?','Ik dacht dat jij dat deed','Testmail gestuurd? Nee','Oeps, verkeerde lijst','Het staat in de bijlage','Even afstemmen','Snel je scherm delen','Kan het iets groter?','Afscheidsborrel'];
+const SURF = {
+  wind:['uit de richting van de klant','noord-noord-oost, ofwel "het is dringend"','windstil, oftewel de stilte voor de storm','af en toe een windvlaag "even snel"'],
+  kans:['een "even snel iets kleins" rond 16:45','een mail met te veel mensen in cc','een vergadering zonder agenda','een klant die na goedkeuring nog iets anders wil','een klant die ook dit weekend een mening heeft','een klant die vooral zijn eigen idee wil horen','een klant die "nog één dingetje" heeft','verrassend weinig, geniet ervan'],
+  tip:['Neem je lunch echt buiten je bureau.','Zet je status op "bezig".','Een schildpad haast zich ook nooit.','Drink water, ook al sta je droog.']
+};
+const SITUATIES_BEL = [
+  {t:'Ik wil alleen even mopperen', wie:['knuffel'], txt:'Een rimpeling. Kwalli of Walli luistert. Zeg het hardop tegen een knuffel, dat helpt echt.'},
+  {t:'Ik wil sparren over werk of een lastige klant', wie:['papa'], txt:'Papa kan meedenken. Bel hem met een concrete vraag, dan heb je sneller antwoord.'},
+  {t:'Ik heb troost of een schouderklopje nodig', wie:['mama'], txt:'Mama weet altijd wat er moet gebeuren, of in elk geval wat er gegeten moet worden.'},
+  {t:'Ik wil lucht geven en er samen om lachen', wie:['ik'], txt:'Tijd voor een lang gesprek. De koffie staat klaar.'},
+  {t:'Tsunami. Alles is te veel.', wie:['ik','papa','mama'], txt:'Adem eerst drie keer in en uit. Bel daarna wie je maar wilt.'}
+];
+const EET_OPTIES = [
+  "STR'EAT in het Veemgebouw",
+  "Albert Heijn Strijp-S (Torenallee)",
+  "Radio Royaal (Strijp-S)",
+  "Het Ketelhuis (Ketelhuisplein)",
+  "Mood (Torenallee)"
+];
+const LOGBOEK = [
+  "Kerstpakket, vorig jaar: niet ontvangen. De zee heeft het genoteerd en is het niet vergeten.",
+  "Een kerstpakket zonder kerstpakket is duurzaam, minimalistisch en erg zuinig.",
+  "Een kerstpakket krijgen waar je niks aan hebt: het is de gedachte die telt, zeggen ze.",
+  "Bedrijfsuitje naar de Efteling: sprookjesachtig. Eigen eten meenemen: ook, maar dan zonder sprookje.",
+  "Eigen eten meenemen naar de Efteling is ook teambuilding: je leert iedereen kennen via hun boterhammen."
+];
+const BALI_QUOTES = [
+  "Remote werken met uitzicht op golven is de enige vorm van overleg die je graag hebt.",
+  "Nog even de inbox. Daarna de oceaan.",
+  "Wifi-snelheid is bijzaak. Golfhoogte is leidend.",
+  "Een goede planning houdt rekening met surftijden.",
+  "Kantoor: nee. Kantoor met palmbomen: ja."
+];
+const PEEK_RANDOM = [
+  {crew:'walli',  t:"Weer iemand weg? Ik blijf wel. Ik kan toch nergens heen."},
+  {crew:'padje',  t:"De surfvakantie komt stapje voor stapje dichterbij. Daar weet ik alles van."},
+  {crew:'kwalli', t:"Ik zweef er even bij. Laat het maar los."},
+  {crew:'nilli',  t:"Ik ben een nijlpaard, dus ik weet precies hoe dit voelt."},
+  {crew:'gekki',  t:"Ik doe alsof ik slaap. Doe je mee?"}
+];
+const NAMEN = {ik: CONFIG.jouwNaam, papa:'Papa', mama:'Mama'};
+
+/* ====== CODE ====== */
+const $ = s => document.querySelector(s);
+const opslag = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d }catch(e){ return d } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} }
+};
+const vandaag = () => new Date().toLocaleDateString('sv');
+const kies = a => a[Math.floor(Math.random()*a.length)];
+function av(c){
+  if(window.KNUFFEL && KNUFFEL.heeft(c.id)) return `<span class="av">${KNUFFEL.avatar(c.id)}</span>`;
+  return `<span class="av"><img src="img/${c.id}.jpg" alt="${c.naam}" onerror="this.remove()">${c.emoji}</span>`;
+}
+
+/* knuffel die opduikt */
+let peekTimer;
+function peek(bericht, crewId){
+  const c = (crewId && CREW.find(x=>x.id===crewId)) || kies(CREW);
+  $('#peek').innerHTML = av(c) + `<div class="praat"><b>${c.naam}:</b> ${bericht}</div>`;
+  $('#peek').classList.add('show');
+  clearTimeout(peekTimer);
+  peekTimer = setTimeout(()=>$('#peek').classList.remove('show'), 5000);
+}
+function confetti(){
+  const sym=['🐚','⭐','🌸','🐠','🐢'];
+  for(let i=0;i<36;i++){
+    const e=document.createElement('span');
+    e.className='confetti'; e.textContent=kies(sym);
+    e.style.left=Math.random()*100+'vw'; e.style.fontSize=(1+Math.random()*1.4)+'rem';
+    e.style.animationDelay=Math.random()*.8+'s';
+    document.body.appendChild(e); setTimeout(()=>e.remove(),4000);
+  }
+}
+
+/* versiering: knuffels naast de koppen */
+document.querySelectorAll('[data-deco]').forEach(el=>{ el.innerHTML = av(CREW[+el.dataset.deco % CREW.length]); });
+
+/* surfrapport, elke dag anders */
+(function(){
+  let seed=0; for(const ch of vandaag()) seed=(seed*31+ch.charCodeAt(0))>>>0;
+  const r = a => a[(seed=(seed*1103515245+12345)>>>0)%a.length];
+  const hoogte = (0.5 + ((seed>>>3)%26)/10).toFixed(1).replace('.',',');
+  $('#rapport').innerHTML = `<h2>Surfrapport van vandaag</h2><dl>
+    <dt>Golfhoogte</dt><dd>${hoogte} meter</dd>
+    <dt>Wind</dt><dd>${r(SURF.wind)}</dd>
+    <dt>Verwachting</dt><dd>kans op ${r(SURF.kans)}</dd>
+    <dt>Tip</dt><dd>${r(SURF.tip)}</dd></dl>`;
+})();
+
+/* teller */
+let staat = opslag.get('nore_teller',{d:vandaag(),n:0});
+if(staat.d!==vandaag()) staat={d:vandaag(),n:0};
+function toonTeller(){
+  $('#teller').textContent=staat.n;
+  let rang=RANGEN[0][1]; for(const [n,t] of RANGEN) if(staat.n>=n) rang=t;
+  $('#rang').textContent=rang;
+}
+$('#golf').addEventListener('click',()=>{
+  staat.n++; opslag.set('nore_teller',staat); toonTeller();
+  $('#reactie').textContent = kies(REACTIES);
+  const g=$('#zee-golf'); g.classList.remove('go'); void g.offsetWidth; g.classList.add('go');
+  if(staat.n%10===0) peek(`Al ${staat.n} golven vandaag. Zal ik even bij je komen zitten?`);
+  else if(Math.random()<0.15){ const pr=kies(PEEK_RANDOM); peek(pr.t, pr.crew); }
+});
+toonTeller();
+
+/* vertaler */
+SITUATIES.forEach((s,i)=>$('#situatie').add(new Option(s.n,i)));
+$('#situatie').setAttribute('aria-label','Situatie');
+function toonSituatie(){ const s=SITUATIES[$('#situatie').value]; $('#denk').textContent=s.d; $('#stuur').textContent=s.s; $('#kopieer-msg').textContent=''; }
+$('#situatie').addEventListener('change',toonSituatie); toonSituatie();
+$('#kopieer').addEventListener('click',async()=>{
+  const tekst=$('#stuur').textContent;
+  try{ await navigator.clipboard.writeText(tekst); }
+  catch(e){ const t=document.createElement('textarea'); t.value=tekst; document.body.appendChild(t); t.select(); try{document.execCommand('copy')}catch(_){} t.remove(); }
+  $('#kopieer-msg').textContent=' Gekopieerd!';
+  if(!opslag.get('nore_eerstekopie',false)){ opslag.set('nore_eerstekopie',true); peek('Eerste mail gekopieerd. Diplomatie: gelukt.'); }
+});
+
+/* bingo */
+let kaart = opslag.get('nore_bingo',null);
+if(!kaart || kaart.vakjes.length!==25){
+  const mix=[...BINGO].sort(()=>Math.random()-.5).slice(0,24); mix.splice(12,0,'Vrij vakje 🐢');
+  kaart={vakjes:mix,aan:mix.map((_,i)=>i===12),bingos:0};
+}
+const LIJNEN=[];
+for(let i=0;i<5;i++){ LIJNEN.push([0,1,2,3,4].map(j=>i*5+j)); LIJNEN.push([0,1,2,3,4].map(j=>j*5+i)); }
+LIJNEN.push([0,6,12,18,24],[4,8,12,16,20]);
+function tekenBingo(){
+  const b=$('#bingo'); b.innerHTML='';
+  kaart.vakjes.forEach((t,i)=>{
+    const k=document.createElement('button'); k.textContent=t; k.setAttribute('aria-pressed',kaart.aan[i]);
+    if(kaart.aan[i]) k.classList.add('aan');
+    k.addEventListener('click',()=>{
+      if(i===12) return;
+      kaart.aan[i]=!kaart.aan[i];
+      const n=LIJNEN.filter(l=>l.every(x=>kaart.aan[x])).length;
+      if(n>kaart.bingos){ confetti(); $('#bingo-msg').textContent='BINGO! 🎉'; peek('Bingo! Dat gaan we vieren met niks doen.'); }
+      else $('#bingo-msg').textContent='';
+      kaart.bingos=n; opslag.set('nore_bingo',kaart); tekenBingo();
+    });
+    b.appendChild(k);
+  });
+}
+$('#bingo-reset').addEventListener('click',()=>{ opslag.set('nore_bingo',null); kaart=null; location.reload(); });
+tekenBingo();
+
+/* eet-planner */
+let laatsteEet = -1;
+$('#eet-knop').addEventListener('click',()=>{
+  let i;
+  do { i = Math.floor(Math.random()*EET_OPTIES.length); } while(EET_OPTIES.length>1 && i===laatsteEet);
+  laatsteEet = i;
+  $('#eet-uitslag').textContent = EET_OPTIES[i];
+});
+
+/* overuren-spaarpot */
+let uren = opslag.get('nore_overuren',0);
+function fmt(n){ return String(n).replace('.',','); }
+function toonUren(){
+  const per = CONFIG.overurenPerMiddag;
+  const middagen = Math.floor(uren/per);
+  const rest = uren - middagen*per;
+  $('#ou-uren').textContent = fmt(uren);
+  $('#ou-balk').style.width = (rest/per*100)+'%';
+  $('#ou-tekst').textContent = middagen>0
+    ? `Genoeg voor ${middagen} vrije middag${middagen>1?'en':''}. Surfplank pakken! Nog ${fmt(per-rest)} uur tot de volgende.`
+    : `Nog ${fmt(per-rest)} uur tot je eerste vrije middag.`;
+}
+function pasUren(delta){
+  const per = CONFIG.overurenPerMiddag;
+  const voor = Math.floor(uren/per);
+  uren = Math.max(0, uren+delta);
+  opslag.set('nore_overuren',uren);
+  toonUren();
+  if(delta>0 && Math.floor(uren/per)>voor){ confetti(); peek('Genoeg uren voor een vrije middag! Ik leg de surfplank alvast klaar.','padje'); }
+}
+$('#ou-plus').addEventListener('click',()=>pasUren(1));
+$('#ou-half').addEventListener('click',()=>pasUren(0.5));
+$('#ou-min').addEventListener('click',()=>pasUren(-1));
+toonUren();
+
+/* Bali-bord */
+function parseD(str){ const [y,m,d]=str.split('-').map(Number); return new Date(y,m-1,d); }
+function toonBali(){
+  let b = opslag.get('nore_bali',null);
+  if(!b && CONFIG.baliDatum){ b={datum:CONFIG.baliDatum,start:vandaag()}; opslag.set('nore_bali',b); }
+  if(!b){ $('#bali-leeg').hidden=false; $('#bali-vol').hidden=true; return; }
+  $('#bali-leeg').hidden=true; $('#bali-vol').hidden=false;
+  const nu=parseD(vandaag()), doel=parseD(b.datum), start=parseD(b.start);
+  const dagen=Math.round((doel-nu)/86400000);
+  const totaal=doel-start;
+  const p = totaal>0 ? Math.min(1,Math.max(0,(nu-start)/totaal)) : 1;
+  $('#bali-dagen').textContent = dagen>0 ? dagen : 0;
+  $('#bali-label').textContent = dagen>1 ? 'dagen tot de golven' : dagen===1 ? 'dag tot de golven' : 'Je bent er!';
+  $('#bali-plank').style.left = (dagen<=0 ? 88 : p*88)+'%';
+  $('#bali-quote').textContent = dagen<=0 ? 'Laptop dicht, surfplank open.' : kies(BALI_QUOTES);
+}
+$('#bali-zet').addEventListener('click',()=>{
+  const v=$('#bali-datum').value; if(!v) return;
+  opslag.set('nore_bali',{datum:v,start:vandaag()}); toonBali();
+});
+$('#bali-wijzig').addEventListener('click',()=>{ opslag.set('nore_bali',null); CONFIG.baliDatum=''; toonBali(); });
+toonBali();
+
+/* logboek */
+let laatsteLog = -1;
+function toonLog(){
+  let i;
+  do { i = Math.floor(Math.random()*LOGBOEK.length); } while(LOGBOEK.length>1 && i===laatsteLog);
+  laatsteLog = i;
+  $('#logboek-tekst').textContent = LOGBOEK[i];
+}
+$('#logboek-knop').addEventListener('click',toonLog);
+toonLog();
+
+/* wie moet ik bellen */
+SITUATIES_BEL.forEach((s,i)=>{
+  const b=document.createElement('button'); b.className='knop licht'; b.textContent=s.t;
+  b.addEventListener('click',()=>{
+    let html=`<p>${s.txt}</p><div class="bellers">`;
+    s.wie.forEach(w=>{
+      if(w==='knuffel'){ const c=kies(CREW); html+=`<span class="av" style="width:60px;height:60px">${av(c)}</span>`; return; }
+      const nr=(CONFIG.telefoon[w]||'').replace(/\s/g,'');
+      html+= nr ? `<a class="knop" href="tel:${nr}">Bel ${NAMEN[w]}</a>` : `<span class="belnaam">Bel ${NAMEN[w]}</span>`;
+    });
+    $('#bel-uitslag').innerHTML=html+'</div>'; $('#bel-uitslag').classList.add('zichtbaar');
+  });
+  $('#opties').appendChild(b);
+});
+
+/* crew */
+$('#crewlijst').innerHTML = CREW.map(c=>{
+  const beeld = (window.KNUFFEL && KNUFFEL.heeft(c.id)) ? `<div class="poppetje">${KNUFFEL.volledig(c.id, c.id==='gekki'?'slaap':'')}</div>` : av(c);
+  return `<div class="kaart">${beeld}<h3>${c.naam}</h3><p>${c.tekst}</p></div>`;
+}).join('');
+</script>
+</body>
+</html>
